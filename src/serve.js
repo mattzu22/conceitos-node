@@ -1,28 +1,27 @@
 import http from "node:http";
 import { json } from "./middlewares/json.js";
+import { routes } from "./routes.js";
 
-const users = []
+//query parms = URL Stateful( Filtros, Paginação ) possuem chave e valor 
+//router params = indetificação de recurso 
+
 
 const serve = http.createServer(async (req, res) =>{
 const { method, url } = req;
 
-await json(res, res)
+await json(req, res)
 
-if(method === "GET" && url === "/users"){
-    return res
-    .end(JSON.stringify(users))
-}
+const route = routes.find(route =>{
+    return route.method === method && route.path.test(url)
+})
 
-if(method === "POST" && url === "/users"){
-    const { name, email } = req.body
-     
-    users.push({
-        id: 1,
-        name,
-        email
-    })
 
-    return res.writeHead(201).end()
+if(route){
+    const routeParams = req.url.match(route.path)
+
+    req.params = { ...routeParams.groups }
+
+    return route.handler(req, res)
 }
 
 return res.writeHead(404).end("not found")

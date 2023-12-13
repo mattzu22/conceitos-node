@@ -18,10 +18,10 @@ class InverseNumberStream extends Transform{
  
 
 const serve = http.createServer(async (req, res) =>{
-    const buffers = []
+    const buffers = [];
 
-    //sinxtase para esperar o req estar completo para poder usa-lo depois 
-    //permiti percorrer toda a stream e enquanto ela nao for peccorida por completo  nada vai ser executado posteriomente 
+    // sinxtase para esperar o req estar completo para poder usa-lo depois 
+    // permiti percorrer toda a stream e enquanto ela nao for peccorida por completo  nada vai ser executado posteriomente 
     for await (const chunck of req){
         buffers.push(chunck)
     }

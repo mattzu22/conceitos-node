@@ -8,7 +8,7 @@ class OneToHundreStream extends Readable {
         const i = this.index++
 
        setTimeout(() => {
-        if(i > 5){
+        if(i > 100){
             this.push(null)
         }else{
             const buf = Buffer.from(String(i))
