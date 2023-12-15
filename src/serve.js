@@ -1,6 +1,7 @@
 import http from "node:http";
 import { json } from "./middlewares/json.js";
 import { routes } from "./routes.js";
+import { extractQueryParams } from "./utils/extract-query-params.js";
 
 //query parms = URL Stateful( Filtros, Paginação ) possuem chave e valor 
 //router params = indetificação de recurso 
@@ -18,6 +19,11 @@ const route = routes.find(route =>{
 
 if(route){
     const routeParams = req.url.match(route.path)
+
+    const { query, ...params } = routeParams.groups
+
+    req.params = params
+    req.query = query ? extractQueryParams(query) : {}
 
     req.params = { ...routeParams.groups }
 
